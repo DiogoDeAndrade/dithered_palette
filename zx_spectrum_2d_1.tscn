@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://dsbchsgxmfk57"]
+
+[ext_resource type="Shader" path="res://zx2d1.gdshader" id="1_h8gt2"]
+[ext_resource type="CompressedTexture3D" uid="uid://4spdlo4g66bb" path="res://base_image.png" id="2_pd4yk"]
+[ext_resource type="Script" path="res://ZXSpectrum2d_1.gd" id="3_kwqqo"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wrpkn"]
+noise_type = 0
+seed = 800
+frequency = 0.1721
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fmwcm"]
+width = 128
+height = 128
+generate_mipmaps = false
+seamless = true
+noise = SubResource("FastNoiseLite_wrpkn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gyr0u"]
+shader = ExtResource("1_h8gt2")
+shader_parameter/resolution = Vector2(640, 360)
+shader_parameter/master_lookup = ExtResource("2_pd4yk")
+shader_parameter/secondary_lookup = ExtResource("2_pd4yk")
+shader_parameter/noiseTexture = SubResource("NoiseTexture2D_fmwcm")
+
+[node name="ZXSpectrum2d" type="ColorRect"]
+material = SubResource("ShaderMaterial_gyr0u")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_kwqqo")
+lookupSize = 32
+palette = PackedColorArray(0, 0, 0, 1, 0, 0, 0.847059, 1, 0, 0, 1, 1, 0.847059, 0, 0, 1, 1, 0, 0, 1, 0.847059, 0, 0.847059, 1, 1, 0, 1, 1, 0, 0.847059, 0, 1, 0, 1, 0, 1, 0, 0.847059, 0.847059, 1, 0, 1, 1, 1, 0.847059, 0.847059, 0, 1, 1, 1, 0, 1, 0.847059, 0.847059, 0.847059, 1, 1, 1, 1, 1)
