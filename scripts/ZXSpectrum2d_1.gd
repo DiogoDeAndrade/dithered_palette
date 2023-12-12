@@ -4,15 +4,21 @@ extends ColorRect
 
 @export var lookupSize : int = 64
 @export var palette : PackedColorArray
+@export var buildNoise : bool = false
+@export var noiseResolution : int = 512
+@export var noiseLevels : int = 8
 
 var primaryTexture : Texture3D
 var secondaryTexture : Texture3D
+var noiseTexture : Texture2D
 
 func _ready():
 	build_lookup()
 
 	material.set("shader_parameter/master_lookup", primaryTexture)
 	material.set("shader_parameter/secondary_lookup", secondaryTexture)
+	if buildNoise:
+		material.set("shader_parameter/noiseTexture", noiseTexture)
 		
 func build_lookup():
 	var data1 = []
@@ -41,6 +47,15 @@ func build_lookup():
 
 	secondaryTexture = ImageTexture3D.new()
 	secondaryTexture.create(Image.FORMAT_RGBA8, lookupSize, lookupSize, lookupSize, false, data2)
+
+	if buildNoise:
+		var img = Image.create(noiseResolution, noiseResolution, false, Image.FORMAT_R8)
+		for y in range(noiseResolution):
+			for x in range(noiseResolution):
+				var n = floor(randf() * noiseLevels) / noiseLevels;				
+				img.set_pixel(x, y, Color(n, n, n))
+
+		noiseTexture = ImageTexture.create_from_image(img)		
 
 func get_closest_color_line(target_color : Color, pal : PackedColorArray):
 	var closestColor1 : Color = pal[0]
@@ -79,25 +94,4 @@ func calculate_color_distance(matchColor : Color, color1 : Color, color2 : Color
 		return [ v.distance_to(v2), 1 ]
 	
 	return [ v.distance_to(v1 + d * w), w ]
-
-"""func get_closest_color(target_color : Color, pal : PackedColorArray) -> Color:
-	var closest_color : Color = pal[0]
-	var smallest_distance : float = INF  # Start with infinity as the smallest distance
-
-	for c in pal:
-		var distance = calculate_color_distance(target_color, c)
-
-		if distance < smallest_distance:
-			smallest_distance = distance
-			closest_color = c
-
-	return closest_color
 	
-func calculate_color_distance(color1 : Color, color2 : Color) -> float:
-	# Calculate the Euclidean distance between two colors
-	var r_diff = color1.r - color2.r
-	var g_diff = color1.g - color2.g
-	var b_diff = color1.b - color2.b
-	return sqrt(r_diff * r_diff + g_diff * g_diff + b_diff * b_diff)
-"""
-

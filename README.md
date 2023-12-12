@@ -19,3 +19,14 @@ This is also my first project in Godot, so I don't know how to do plenty of thin
 ![Screenshot After](screenshots/screen02.png)
 
 ![Gradients](screenshots/screen03.png)
+
+## Version 2
+
+- Added shader for spatial post-process (3d scenes)
+- Added functions to generate a white noise texture
+
+![Screenshot Before](screenshots/screen04.png)
+
+![Screenshot After](screenshots/screen05.png)
+
+![Gradients](screenshots/screen06.png)

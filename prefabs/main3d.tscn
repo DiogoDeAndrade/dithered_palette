@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://cp4gef5luu6lg"]
+
+[ext_resource type="PackedScene" uid="uid://c45hsj486itdm" path="res://prefabs/zx_spectrum_3d_1.tscn" id="1_wi0i5"]
+[ext_resource type="PackedScene" uid="uid://bii20l7s5wkue" path="res://models/sponza/Sponza.gltf" id="2_n0vem"]
+
+[sub_resource type="Environment" id="Environment_30y0m"]
+ssr_enabled = true
+ssao_enabled = true
+ssil_enabled = true
+sdfgi_enabled = true
+glow_enabled = true
+volumetric_fog_density = 0.0946
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_30y0m")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.0654554, 0, -0.997856, 0, 1, 0, 0.997856, 0, -0.0654554, -6.03386, 3.39893, -0.453081)
+
+[node name="zx_spectrum_3d_1" parent="Camera3D" instance=ExtResource("1_wi0i5")]
+transform = Transform3D(1, 0, 2.23517e-08, 0, 1, 0, -2.23517e-08, 0, 1, -8.9407e-08, 0, -3.725)
+noiseLevels = 8
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 20, 0)
+light_energy = 4.0
+light_indirect_energy = 10.0
+shadow_enabled = true
+
+[node name="Sponza" parent="." instance=ExtResource("2_n0vem")]
