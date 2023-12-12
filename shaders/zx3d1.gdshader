@@ -10,6 +10,8 @@ uniform sampler3D master_lookup:repeat_disable,filter_nearest;
 uniform sampler3D secondary_lookup:repeat_disable,filter_nearest;
 uniform sampler2D noiseTexture:repeat_enable,filter_nearest;
 uniform vec2      resolution = vec2(320, 240);
+uniform float     colorLevels = 8.0;
+uniform float 	  ditherResolution = 64.0;
 
 void vertex(){
 	POSITION = vec4(VERTEX, 1.0);
@@ -21,6 +23,7 @@ void fragment()
 	uv = floor(uv * resolution)/resolution;
 	
 	vec3 screen_color = texture(screen_texture, uv).rgb;
+	screen_color = floor(screen_color * colorLevels) / colorLevels;
 	vec3 normal = texture(normal_texture, uv).rgb;
 	float roughness =  texture(normal_texture, uv).w;
 	
@@ -36,8 +39,8 @@ void fragment()
 	float f = c2.a;
 	// Now choose one or the other color, based on the value of c2.a
 	// which acts like a percentage value
-	float n = texture(noiseTexture, SCREEN_UV).r;
-	if (c2.a < n)
+	float n = texture(noiseTexture, SCREEN_UV * ditherResolution).r;
+	if (c2.a <= n)
 		ALBEDO.rgb = c1.rgb;
 	else
 		ALBEDO.rgb = c2.rgb;
@@ -52,29 +55,6 @@ void fragment()
 	//ALBEDO.rgb = c2.rgb;
 	// Output noise
 	//ALBEDO.rgb = vec3(n,n,n);
-	
-	//ALBEDO = vec3(linear_depth); 	// showing depth texture
-	//ALBEDO = normal; 				// showing normal texture
-	//ALBEDO = vec3(roughness); 	// showing roughness texture
-	//ALBEDO = screen_color;		// showing screen texture
-	
-	/*vec2 iResolution = 1.0 / SCREEN_PIXEL_SIZE;
-	vec2 q = FRAGCOORD.xy / iResolution.xy;
-	q = floor(vec2(q.x * resolution.x, q.y * resolution.y)) / vec2(resolution.x, resolution.y);
-	vec3 color = texture( screen_texture, q.xy ).rgb;
-	vec4 c1 = texture(master_lookup, color.xyz);
-	vec4 c2 = texture(secondary_lookup, color.xyz);
-	// Now choose one or the other color, based on the value of c2.a
-	// which acts like a percentage value
-	float n = texture(noiseTexture, q.xy * 32.0).r;
-	if (c2.a <= n)
-		COLOR.rgb = c1.rgb;
-	else
-		COLOR.rgb = c2.rgb;
-
-	//COLOR.rgb = mix(c1.rgb, c2.rgb, c2.a);
-	//COLOR.rgb = c1.rgb;
-	//COLOR.rgb = c2.rgb;
-	//COLOR.rgb = vec3(c2.a, c2.a, c2.a);
-	//COLOR.rgb = vec3(n,n,n);*/
+	// Output color to match
+	//ALBEDO.rgb = screen_color.rgb;
 }
