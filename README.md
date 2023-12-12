@@ -31,7 +31,7 @@ This is also my first project in Godot, so I don't know how to do plenty of thin
 
 ![Gradients](screenshots/screen06.png)
 
-## Remarks
+## Other experiments
 
 While the effect might be cool, it probably requires assets done to exploit this, the tendency is to go to black a lot.
 I've also added in the package some noise textures (blue noise and bayer) that provide a more ordered result.
@@ -58,32 +58,32 @@ Dithering in noisy images just adds to the confusion:
 
 ![Gameboy w/ dithering](screenshots/screen13.png)
 
+## Version 3
+
+I did one more experiment, and I believe this is the best one yet. It requires art to be done for this style (simpler shapes, a lot of light), but the results are quite interesting.
+
+The algorithm/shader is the same, the way I build the volume textures is slightly different.
+Now, I convert the colors to HSV and I try to match them through distance in hue (unless the colour has low saturation, since greys aren't affected by color that much, in that case I do a match by brightness with just the greys). The first volume texture is that saturated/bright colour. The second one if the color black to create a gradient with the dithering, with the alpha factor describing how "dark" the colour is (so how much dithering it should use in that case).
+
+![HSL matching](screenshots/screen14.png)
+
+![HSL matching](screenshots/screen15.png)
+
 ## Licenses
 
-* All source code by Diogo de Andrade is licensed under the [MIT] license.
-* Sponza model from the [glTF-Sample-Assest repo].
-* Some models in scene main3d_2 are not made available in the repo, since they are from [Sinty Studios] and can't be distributed.
-* All remaining art by Diogo de Andrade, available throught the [CC0] license.
+- All source code by Diogo de Andrade is licensed under the [MIT] license.
+- Sponza model from the [glTF-Sample-Assest repo].
+- Some models in scene main3d_2 are not made available in the repo, since they are from [Sinty Studios] ([SciFi City]) and can't be distributed - just referencing them because some of the screenshots use them.
+- All remaining art by Diogo de Andrade, available throught the [CC0] license.
 
 ## Metadata
 
-* Autor: [Diogo Andrade]
+- Autor: [Diogo Andrade]
 
 [Diogo Andrade]:https://github.com/DiogoDeAndrade
 [glTF-Sample-Assest repo]:https://github.com/KhronosGroup/glTF-Sample-Assets
 [Sinty Studios]:https://www.syntystudios.com/
 [SciFi City]:https://syntystore.com/products/polygon-sci-fi-city
-[Midjourney]:https://www.midjourney.com/home/
 [CC0]:https://creativecommons.org/publicdomain/zero/1.0/
 [CC-BY 3.0]:https://creativecommons.org/licenses/by/3.0/
-[GB Studio]:https://www.gbstudio.dev/
-[GB Pixel Art Jam 2023]:https://itch.io/jam/gbpixelartjam23  
 [MIT]:LICENSE
-[chasersgaming]:https://itch.io/profile/chasersgaming
-[Secret Service Building GB]:https://chasersgaming.itch.io/rpg-asset-tile-set-secret-service-building-gb
-[Military Base GB]:https://chasersgaming.itch.io/rpg-assets-tile-set-military-base-gameboy
-[Soldier GB]:https://chasersgaming.itch.io/rpg-assets-character-soldier-gameboy
-[Gameboy Platformer Tile]:https://opengameart.org/content/gameboy-platformer-art
-[LittleSadNerd]:https://opengameart.org/users/littlesadnerd
-[GB Studio Plugins]:https://github.com/pau-tomas/gb-studio-plugins
-[Pau]:https://github.com/pau-tomas/

@@ -14,17 +14,11 @@ var maxFactor : float = 0.75
 
 var primaryTexture : Texture3D
 var secondaryTexture : Texture3D
-var noiseTexture : Texture2D
+var noiseTexture : Texture2D 
+const ZX = preload("ZX.gd")
 
 func _ready():
-	
-	build_lookup()
-	
-	var material = get_mesh().get_material()
-	material.set("shader_parameter/master_lookup", primaryTexture)
-	material.set("shader_parameter/secondary_lookup", secondaryTexture)
-	if buildNoise:
-		material.set("shader_parameter/noiseTexture", noiseTexture)
+	_on_visibility_changed()
 		
 func build_lookup():
 	var data1 = []
@@ -41,7 +35,7 @@ func build_lookup():
 					var closestColor = ZX.get_closest_color(sourceColor, palette)
 					closestColor.a = 1;
 					img1.set_pixel(x, y, closestColor)
-					img2.set_pixel(x, y, closestColor)										
+					img2.set_pixel(x, y, closestColor)
 				else:
 					var line = ZX.get_closest_color_line(sourceColor, palette)
 					var destColor0 = line[0]
@@ -69,3 +63,12 @@ func build_lookup():
 
 		noiseTexture = ImageTexture.create_from_image(img)		
 
+func _on_visibility_changed():
+	if visible:
+		build_lookup()
+		
+		var material = get_mesh().get_material()
+		material.set("shader_parameter/master_lookup", primaryTexture)
+		material.set("shader_parameter/secondary_lookup", secondaryTexture)
+		if buildNoise:
+			material.set("shader_parameter/noiseTexture", noiseTexture)

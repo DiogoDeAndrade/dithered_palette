@@ -1,4 +1,4 @@
-extends Node
+@tool
 
 static func get_closest_color(target_color : Color, pal : PackedColorArray):
 	var closestColor : Color = pal[0]
@@ -40,6 +40,12 @@ static func calculate_color_distance(color1 : Color, color2 : Color):
 
 	return (v2 - v1).length()
 
+static func calculate_color_distance_hsv(h : float, s : float, v : float, color2 : Color):
+	var v1 = Vector3(h, s, v)
+	var v2 = Vector3(color2.h, color2.s, color2.v)
+
+	return (v2 - v1).length()
+
 static func calculate_color_distance_to_line(matchColor : Color, color1 : Color, color2 : Color, minFactor : float = 0.0, maxFactor : float = 1.0):
 	
 	var v = Vector3(matchColor.r, matchColor.g, matchColor.b)
@@ -55,5 +61,36 @@ static func calculate_color_distance_to_line(matchColor : Color, color1 : Color,
 		return [ v.distance_to(v2), 1.0 ]
 	
 	return [ v.distance_to(v1 + d * w), (w - minFactor) / (maxFactor - minFactor) ]
-	
 
+static func get_closest_color_by_hue(target_color : Color, pal : PackedColorArray):
+	if target_color.s < 0.25:
+		# This is a gray color, match by lightness
+		return get_closest_color_by_value(target_color, pal)
+	
+	var closestColor : Color = pal[0]
+	var smallest_distance : float = INF  # Start with infinity as the smallest distance
+	var matchH = target_color.h
+	
+	for c in pal:
+		# Wrap around distance in hue
+		var distance = min(abs(matchH - c.h), abs((matchH + 1) - c.h))
+		if distance < smallest_distance:
+			smallest_distance = distance
+			closestColor = c
+
+	return closestColor
+
+static func get_closest_color_by_value(target_color : Color, pal : PackedColorArray):
+	var closestColor : Color = pal[0]
+	var smallest_distance : float = INF  # Start with infinity as the smallest distance
+	var matchV = target_color.v
+	
+	for c in pal:
+		# Skip non-greys
+		if c.s < 0.25:
+			var distance = abs(matchV - c.v)
+			if distance < smallest_distance:
+				smallest_distance = distance
+				closestColor = c
+
+	return closestColor

@@ -14,10 +14,6 @@ config/name="Godot Zx"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://images/icon.svg"
 
-[autoload]
-
-ZX="*res://scripts/ZX.gd"
-
 [display]
 
 window/size/viewport_width=1280

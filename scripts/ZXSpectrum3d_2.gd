@@ -1,7 +1,8 @@
 @tool
 
-extends ColorRect
+extends MeshInstance3D
 
+@export var useHSL : bool = false
 @export var useClosest : bool = false
 @export var lookupSize : int = 64
 @export var palette : PackedColorArray
@@ -9,35 +10,39 @@ extends ColorRect
 @export var noiseResolution : int = 512
 @export var noiseLevels : int = 8
 
+var minFactor : float = 0.25
+var maxFactor : float = 0.75
+
 var primaryTexture : Texture3D
 var secondaryTexture : Texture3D
 var noiseTexture : Texture2D
 const ZX = preload("ZX.gd")
 
 func _ready():
-	build_lookup()
-
-	material.set("shader_parameter/master_lookup", primaryTexture)
-	material.set("shader_parameter/secondary_lookup", secondaryTexture)
-	if buildNoise:
-		material.set("shader_parameter/noiseTexture", noiseTexture)
+	_on_visibility_changed()	
 		
 func build_lookup():
 	var data1 = []
 	var data2 = []
 	
-	for z in range(lookupSize):
+	for z in range(lookupSize): 
 		var img1 = Image.create(lookupSize, lookupSize, false, Image.FORMAT_RGB8)
 		var img2 = Image.create(lookupSize, lookupSize, false, Image.FORMAT_RGBA8)
 		for x in range(lookupSize):
 			for y in range(lookupSize):
 				# For the color x,y,z, find closest
 				var sourceColor = Color(float(x) / lookupSize, float(y) / lookupSize, float(z) / lookupSize)
-				if useClosest:
-					var closestColor = ZX.get_closest_color(sourceColor, palette)
-					closestColor.a = 1;
+				if useClosest or useHSL:
+					var closestColor : Color
+					if useHSL:
+						closestColor = ZX.get_closest_color_by_hue(sourceColor, palette)
+						img2.set_pixel(x, y, Color(0,0,0, clamp(closestColor.v - sourceColor.v, 0, 1)))
+					else:
+						closestColor = ZX.get_closest_color(sourceColor, palette)
+						closestColor.a = 1;
+						img2.set_pixel(x, y, closestColor)
+						
 					img1.set_pixel(x, y, closestColor)
-					img2.set_pixel(x, y, closestColor)										
 				else:
 					var line = ZX.get_closest_color_line(sourceColor, palette)
 					var destColor0 = line[0]
@@ -45,7 +50,7 @@ func build_lookup():
 					destColor1.a = line[2]
 					
 					img1.set_pixel(x, y, destColor0)
-					img2.set_pixel(x, y, destColor1)		
+					img2.set_pixel(x, y, destColor1)					
 				
 		data1.append(img1)
 		data2.append(img2)		
@@ -55,8 +60,8 @@ func build_lookup():
 
 	secondaryTexture = ImageTexture3D.new()
 	secondaryTexture.create(Image.FORMAT_RGBA8, lookupSize, lookupSize, lookupSize, false, data2)
-
-	if buildNoise: 
+	
+	if buildNoise:
 		var img = Image.create(noiseResolution, noiseResolution, false, Image.FORMAT_R8)
 		for y in range(noiseResolution):
 			for x in range(noiseResolution):
@@ -64,3 +69,15 @@ func build_lookup():
 				img.set_pixel(x, y, Color(n, n, n))
 
 		noiseTexture = ImageTexture.create_from_image(img)		
+
+
+
+func _on_visibility_changed():
+	if visible:
+		build_lookup()
+	
+		var material = get_mesh().get_material()
+		material.set("shader_parameter/master_lookup", primaryTexture)
+		material.set("shader_parameter/secondary_lookup", secondaryTexture)
+		if buildNoise:
+			material.set("shader_parameter/noiseTexture", noiseTexture)
