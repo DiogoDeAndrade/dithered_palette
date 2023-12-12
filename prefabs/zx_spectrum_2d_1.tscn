@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://dsbchsgxmfk57"]
 
-[ext_resource type="Shader" path="res://zx2d1.gdshader" id="1_h8gt2"]
-[ext_resource type="CompressedTexture3D" uid="uid://4spdlo4g66bb" path="res://base_image.png" id="2_pd4yk"]
-[ext_resource type="Script" path="res://ZXSpectrum2d_1.gd" id="3_kwqqo"]
+[ext_resource type="Shader" path="res://shaders/zx2d1.gdshader" id="1_h8gt2"]
+[ext_resource type="CompressedTexture3D" uid="uid://4spdlo4g66bb" path="res://images/base_image.png" id="2_pd4yk"]
+[ext_resource type="Script" path="res://scripts/ZXSpectrum2d_1.gd" id="3_kwqqo"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wrpkn"]
 noise_type = 0

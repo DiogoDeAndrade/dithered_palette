@@ -1,14 +1,14 @@
 [gd_scene load_steps=3 format=3 uid="uid://bdg784l6isi36"]
 
-[ext_resource type="Texture2D" uid="uid://bamf00ixtc4fk" path="res://screen.png" id="1_yktaj"]
-[ext_resource type="PackedScene" uid="uid://dsbchsgxmfk57" path="res://zx_spectrum_2d_1.tscn" id="2_olgky"]
+[ext_resource type="Texture2D" uid="uid://clfh375iiaiyc" path="res://images/screen_rainbow.png" id="1_8utl0"]
+[ext_resource type="PackedScene" uid="uid://dsbchsgxmfk57" path="res://prefabs/zx_spectrum_2d_1.tscn" id="2_olgky"]
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Screen" type="Sprite2D" parent="."]
 position = Vector2(647.25, 318.5)
 scale = Vector2(1.27881, 1.19434)
-texture = ExtResource("1_yktaj")
+texture = ExtResource("1_8utl0")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
