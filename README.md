@@ -17,3 +17,5 @@ This is also my first project in Godot, so I don't know how to do plenty of thin
 ![Screenshot Before](screenshots/screen01.png)
 
 ![Screenshot After](screenshots/screen02.png)
+
+![Gradients](screenshots/screen03.png)
